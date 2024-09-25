@@ -187,6 +187,16 @@ def get_request_data2():
     except json.JSONDecodeError:
         return ""        
 
+@app.route('/get-request-data3', methods=['GET'])
+def get_request_data3():
+    try:
+        with open('request.json', 'r') as json_file:
+            data = json.load(json_file)
+        return jsonify(data)
+    except FileNotFoundError:
+        return ""
+    except json.JSONDecodeError:
+        return ""        
 
 @app.route('/home')
 def home():

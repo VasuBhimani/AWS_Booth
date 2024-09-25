@@ -31,6 +31,37 @@
 //         .catch(error => {
 //             console.error('Error:', error);
 //         });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+            function checkData() {
+            fetch('/get-request-data3')
+                .then(response => response.json())
+                .then(data => {
+                if (data) {
+                    window.location.href = "/home";
+                    // console.log(data);
+                }
+                
+                // You can update the DOM or perform other actions with the data here
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            // Check for data every 5 seconds
+            setInterval(checkData, 1000);
+        });
         
+
+        function redirectToHome() {
+    setTimeout(function() {
+        window.location.href = '/';
+    }, 10000);  // 10000 milliseconds = 10 seconds
+}
+
+// Call the function to start the redirect
+redirectToHome();
+
+
 </script>
 </html>
