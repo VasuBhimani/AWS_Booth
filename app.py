@@ -208,6 +208,11 @@ def home():
 #--------------------------------------------------------------------------------------------------
 
 
+import smtplib
+import ssl
+from email.message import EmailMessage
+from email.mime.text import MIMEText
+
 def send_email_with_image():
     # Define email sender and receiver
     email_sender = 'bhimanivasu93@gmail.com'
@@ -216,39 +221,65 @@ def send_email_with_image():
 
     # Set the subject and body of the email
     subject = 'Check your AVATAR'
-    body = """
-    Your AVATAR is ready.
+    body_html = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your AI-Enhanced Image</title>
+        <style>
+            body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
+            .email-container { max-width: 600px; margin: auto; padding: 20px; background-color: #fff; border-radius: 8px; }
+            .header { background-color: #232f3e; padding: 20px; text-align: center; }
+            .header img { width: 100px; }
+            .header h1 { color: #fff; }
+            .content { padding: 20px; text-align: center; }
+            .button-container a { background-color: #ff9900; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px; }
+            .footer { text-align: center; color: #888; font-size: 12px; margin-top: 20px; }
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <img src="https://d1.awsstatic.com/Identity/AWS_logo_RGB.7fa564d3c99b193e7a9e66a1aa248b4fd3c57b8c.png" alt="AWS Logo">
+                <h1>Your AI-Enhanced Image is Ready!</h1>
+            </div>
+            <div class="content">
+                <h2>Hello!</h2>
+                <p>Your AI-enhanced image is ready for you to view and download.</p>
+                <div class="button-container">
+                    <a href="YOUR_DOWNLOAD_LINK_HERE" target="_blank">Download Your Image</a>
+                </div>
+            </div>
+            <div class="footer">
+                <p>© 2024 AWS AI Booth. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+    </html>
     """
 
-    # Create an email message object
+    # Create the email message object
     em = EmailMessage()
     em['From'] = email_sender
     em['To'] = email_receiver
     em['Subject'] = subject
-    em.set_content(body)
+    em.set_content(body_html, subtype="html")
 
-    # Attach the image (hardcoding the MIME type as 'image/jpeg')
-    try:
-        with open('static/processed_image.jpg', 'rb') as img_file:  # Replace with actual image path
-            img_data = img_file.read()
-            em.add_attachment(img_data, maintype='image', subtype='jpeg', filename='image.jpg')
-            print("Email sent successfully!")
-    except FileNotFoundError:
-        print("The image file was not found!")
-        return
+    # Attach the image
+    with open('static/processed_image.jpg', 'rb') as img_file:
+        img_data = img_file.read()
+        em.add_attachment(img_data, maintype='image', subtype='jpeg', filename='image.jpg')
 
-    # Add SSL (layer of security)
+    # Add SSL (layer of security) and send the email
     context = ssl.create_default_context()
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.sendmail(email_sender, email_receiver, em.as_string())
+        print("Email sent successfully!")
 
-    # Log in and send the email
-    try:
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
-            smtp.login(email_sender, email_password)
-            smtp.sendmail(email_sender, email_receiver, em.as_string())
-            print("Email sent successfully!")
-            
-    except smtplib.SMTPException as e:
-        print(f"Failed to send email: {e}")
+
 
 #-------------------------------------------------------------------------------------------------------------------------
 
@@ -263,37 +294,108 @@ def restart():
     return 'Message sent!', 200
 
 #--------------------------------------------------------------------------------------------------------------------
-# def get_db_connection():
-#     return mysql.connector.connect(
-#         host='localhost',
-#         user='root',
-#         password='root',
-#         database='aws'
-#     )
-
-
-
-# def update_flag():
-#     # user_no = request.json.get('user_no')  # Get user_no from the request body
-#     global user_no
-#     conn = get_db_connection()
-#     cursor = conn.cursor()
-
-#     try:
-#         update_query = f"UPDATE book SET flag = 1 WHERE no = {user_no}"
-#         cursor.execute(update_query)
-#         conn.commit()
-
-#         if cursor.rowcount > 0:
-#             return jsonify({"message": "Flag updated successfully"}), 200
-#         else:
-#             return jsonify({"message": "User not found"}), 404
-#     finally:
-#         cursor.close()
-#         conn.close()
 
 
 #---------------------------------------------------------------------------------------------------------------
 
+# body_html = """
+# <!DOCTYPE html>
+# <html lang="en">
+# <head>
+#     <meta charset="UTF-8">
+#     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#     <title>Your AI-Enhanced Image</title>
+#     <style>
+#         body {
+#             font-family: Arial, sans-serif;
+#             margin: 0;
+#             padding: 0;
+#             background-color: #f4f4f4;
+#         }
+#         .email-container {
+#             max-width: 600px;
+#             margin: 20px auto;
+#             background-color: #fff;
+#             padding: 20px;
+#             border-radius: 8px;
+#             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+#         }
+#         .header {
+#             text-align: center;
+#             background-color: #232f3e;
+#             padding: 20px;
+#             border-radius: 8px 8px 0 0;
+#         }
+#         .header img {
+#             width: 100px;
+#         }
+#         .header h1 {
+#             color: #fff;
+#             font-size: 24px;
+#             margin-top: 10px;
+#         }
+#         .content {
+#             padding: 20px;
+#             text-align: center;
+#         }
+#         .content h2 {
+#             color: #333;
+#             font-size: 22px;
+#         }
+#         .content p {
+#             color: #555;
+#             font-size: 16px;
+#         }
+#         .content img {
+#             width: 100%;
+#             max-width: 400px;
+#             margin: 20px 0;
+#         }
+#         .button-container {
+#             text-align: center;
+#             margin-top: 20px;
+#         }
+#         .button-container a {
+#             background-color: #ff9900;
+#             color: #fff;
+#             padding: 12px 24px;
+#             text-decoration: none;
+#             border-radius: 4px;
+#             font-size: 16px;
+#         }
+#         .footer {
+#             text-align: center;
+#             color: #888;
+#             font-size: 12px;
+#             margin-top: 20px;
+#         }
+#     </style>
+# </head>
+# <body>
+
+# <div class="email-container">
+#     <div class="header">
+#         <img src="https://d1.awsstatic.com/Identity/AWS_logo_RGB.7fa564d3c99b193e7a9e66a1aa248b4fd3c57b8c.png" alt="AWS Logo">
+#         <h1>Your AI-Enhanced Image is Ready!</h1>
+#     </div>
+
+#     <div class="content">
+#         <h2>Hello!</h2>
+#         <p>Thank you for visiting our AI AWS booth. We've enhanced your image using the latest AI technology, and it's ready for you to view and download.</p>
+        
+
+#         <div class="button-container">
+#             <a href="YOUR_DOWNLOAD_LINK_HERE" target="_blank">Download Your Image</a>
+#         </div>  
+#     </div>
+
+#     <div class="footer">
+#         <p>© 2024 AWS AI Booth. All rights reserved.</p>
+#     </div>
+# </div>
+
+# </body>
+# </html>
+# """
 if __name__ == '__main__':
-    app.run(port=5000,debug=True)
+    app.run(port=5000,debug=True,host="0.0.0.0")
