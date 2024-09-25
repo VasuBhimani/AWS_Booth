@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture Image</title>
+    <style>
+        /* Flip the video to stop showing mirrored image */
+        #video {
+            transform: scaleX(-1);  /* Flips the video horizontally */
+        }
+
+        /* Optionally, you can add some basic styles */
+        #countdown {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+
+<script>
+    // Define the URL in a JavaScript variable
+    const nextPageUrl = "{{ url_for('next_page') }}"; // Use Jinja2 to render the URL
+</script>
+
+</head>
+<body>
+    <h1>Capture Image</h1>
+    <video id="video" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <div id="countdown">7</div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

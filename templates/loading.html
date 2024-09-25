@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+</head>
+<body>
+    <h1>Loading...</h1>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            function checkData() {
+            fetch('/get-request-data')
+                .then(response => response.json())
+                .then(data => {
+                if (data) {
+                    window.location.href = "/home";
+                    // console.log(data);
+                }
+                
+                // You can update the DOM or perform other actions with the data here
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            // Check for data every 5 seconds
+            setInterval(checkData, 1000);
+        });
+
+
+
+    </script>
+</body>
+
+
+</html>

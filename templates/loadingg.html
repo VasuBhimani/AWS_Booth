@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Image Every Second</title>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+            function checkData() {
+            fetch('/get-request-data2')
+                .then(response => response.json())
+                .then(data => {
+                if (data) {
+                    window.location.href = "/output";
+                    // console.log(data);
+                }
+                
+                // You can update the DOM or perform other actions with the data here
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            // Check for data every 5 seconds
+            setInterval(checkData, 1000);
+        });
+    </script>
+</head>
+<body>
+    <h1>Checking for Image...</h1>
+    <p>If the image is found, you will be redirected.</p>
+</body>
+</html>
