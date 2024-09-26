@@ -8,7 +8,7 @@ import requests
 from email.message import EmailMessage
 import ssl
 import smtplib
-import mysql.connector
+# import mysql.connector
 
 
 from flask_cors import CORS
@@ -51,7 +51,7 @@ def save_image():
 
     # Payload for Segmind API
     payload = {
-        "prompt": "photo of a man",
+        "prompt": "photo of a human",
         "face_image": b64_image,
         "negative_prompt": "lowquality, badquality, sketches",
         "style": "Vibrant Color",
@@ -106,12 +106,6 @@ def save_image():
 
 
             return "Processing complete. Check the output page for results."
-    #     else:
-    #         print("Unexpected content type:", content_type)
-    #         return jsonify({"status": "error", "message": "Unexpected content type"}), 500
-    # else:
-    #     print(f"API Error {response.status_code}: {response.text}")
-    #     return jsonify({"status": "error", "message": response.text}), response.status_code
 
 # Utility function to convert the saved image to base64
 def to_base64(img_path):
@@ -141,13 +135,18 @@ def next_page():
 #-------------------------------------------------------------------------------------------------
 
 last_received_data = None
+email = None
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
     global last_received_data
+    global email
+
     data = request.get_json()
     print(last_received_data)
     print(type(last_received_data))
+
+    email = data.get('email')
     if data != last_received_data:
         last_received_data = data
         print(f"Received data: {data}")
@@ -208,17 +207,22 @@ def home():
 
 #--------------------------------------------------------------------------------------------------
 
+# email = "vasubhimani93@gmail.com"
 
 import smtplib
 import ssl
 from email.message import EmailMessage
 from email.mime.text import MIMEText
 
+# @app.route('/testemail', methods=['POST'])
 def send_email_with_image():
-    # Define email sender and receiver
-    email_sender = 'bhimanivasu93@gmail.com'
+    global email
+    # Define email sender and receiver\
+    print(email , "==============================================")
+    email_sender = "aws.scd.charusat@gmail.com"
     email_password = os.getenv("EMAIL_PASSWORD")
-    email_receiver = 'vasubhimani93@gmail.com'
+    email_receiver = email
+    print(email_receiver,"===========================================")
 
     # Set the subject and body of the email
     subject = 'Check your AVATAR'
