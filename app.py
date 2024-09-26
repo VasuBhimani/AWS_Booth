@@ -7,17 +7,14 @@ import json
 import requests
 from email.message import EmailMessage
 import ssl
+import random
 import smtplib
-# import mysql.connector
 
 
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
-
-# global user_no
-# user_no = None
 
 @app.route('/')
 def index():
@@ -49,12 +46,15 @@ def save_image():
     b64_image = to_base64(image_path)  
     print("Image converted to base64")
 
+    themes = ["Neon", "Vibrant color", "Mars", "Snow", "Cyberpunk"]
+    app_theme = random.choice(themes)
+
     # Payload for Segmind API
     payload = {
         "prompt": "photo of a human",
         "face_image": b64_image,
         "negative_prompt": "lowquality, badquality, sketches",
-        "style": "Vibrant Color",
+        "style": app_theme,
         "samples": 1,
         "num_inference_steps": 10,
         "guidance_scale": 5,
@@ -102,8 +102,7 @@ def save_image():
             with open('image.json', 'w') as json_file:
                 json.dump(data, json_file)
             print("data write inside image file")
-            send_email_with_image()
-
+            send_email_with_image() 
 
             return "Processing complete. Check the output page for results."
 
@@ -114,12 +113,8 @@ def to_base64(img_path):
 
 @app.route('/output')
 def output():
-
     with open('image.json', 'w'):
         pass 
-    # print(user_no)
-    # print(type(user_no))
-    # update_flag()
     restart()
     return render_template('output.html')
 
@@ -128,8 +123,8 @@ def output():
 
 @app.route('/next_page')
 def next_page():
-    # with open('request.json', 'w') as json_file:
-    #     pass  # This will clear the file without writing anything
+    with open('request.json', 'w') as json_file:
+        pass  # This will clear the file without writing anything
     return render_template('loading_animation.html')
 
 #-------------------------------------------------------------------------------------------------
@@ -150,8 +145,6 @@ def webhook():
     if data != last_received_data:
         last_received_data = data
         print(f"Received data: {data}")
-        # return jsonify({'status': 'success', 'data': data}), 200
-        # return render_template('index.html')
         with open('request.json', 'w') as json_file:
             json.dump(data, json_file)
 
@@ -207,7 +200,6 @@ def home():
 
 #--------------------------------------------------------------------------------------------------
 
-# email = "vasubhimani93@gmail.com"
 
 import smtplib
 import ssl
@@ -218,52 +210,117 @@ from email.mime.text import MIMEText
 def send_email_with_image():
     global email
     # Define email sender and receiver\
-    print(email , "==============================================")
     email_sender = "aws.scd.charusat@gmail.com"
     email_password = os.getenv("EMAIL_PASSWORD")
     email_receiver = email
-    print(email_receiver,"===========================================")
+
 
     # Set the subject and body of the email
     subject = 'Check your AVATAR'
     body_html = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Your AI-Enhanced Image</title>
-        <style>
-            body { font-family: Arial, sans-serif; background-color: #f4f4f4; }
-            .email-container { max-width: 600px; margin: auto; padding: 20px; background-color: #fff; border-radius: 8px; }
-            .header { background-color: #232f3e; padding: 20px; text-align: center; }
-            .header img { width: 100px; }
-            .header h1 { color: #fff; }
-            .content { padding: 20px; text-align: center; }
-            .button-container a { background-color: #ff9900; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px; }
-            .footer { text-align: center; color: #888; font-size: 12px; margin-top: 20px; }
-        </style>
-    </head>
-    <body>
-        <div class="email-container">
-            <div class="header">
-                <img src="https://d1.awsstatic.com/Identity/AWS_logo_RGB.7fa564d3c99b193e7a9e66a1aa248b4fd3c57b8c.png" alt="AWS Logo">
-                <h1>Your AI-Enhanced Image is Ready!</h1>
-            </div>
-            <div class="content">
-                <h2>Hello!</h2>
-                <p>Your AI-enhanced image is ready for you to view and download.</p>
-                <div class="button-container">
-                    <a href="YOUR_DOWNLOAD_LINK_HERE" target="_blank">Download Your Image</a>
-                </div>
-            </div>
-            <div class="footer">
-                <p>© 2024 AWS AI Booth. All rights reserved.</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    """
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your AI Avatar from the Event</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #e3e3e993;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, rgba(252, 70, 107, 0.6), rgba(63, 94, 251, 0.6));
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .header img {
+        width: 100%; /* Make the image responsive */
+        height: auto; /* Maintain aspect ratio */
+        border-radius: 10px 10px 0 0; /* Round top corners */
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .content {
+        padding: 20px;
+        text-align: center;
+      }
+
+      .content h2 {
+        font-size: 20px;
+        color: #333;
+      }
+
+      .content p {
+        font-size: 16px;
+        color: #666;
+      }
+
+      .button-container {
+        margin: 20px 0;
+      }
+
+      .button {
+        background: linear-gradient(135deg, rgba(252, 70, 107, 0.6), rgba(63, 94, 251, 0.6));
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 16px;
+        border-radius: 5px;
+        display: inline-block;
+      }
+
+      .footer {
+        background-color: #f4f4f4;
+        padding: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: #999;
+      }
+
+      @media screen and (max-width: 600px) {
+        .container {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="https://awsboothdemo2.s3.amazonaws.com/IMG_7819.PNG" alt="Event Header Image" />   
+      </div>
+      <div class="content">
+        <h2>Your AI Avatar is Ready!</h2>
+        <p>
+          Hi Attendee<br />
+          We're excited to share your AI-generated avatar from the event. Please find the image attached to this email.
+        </p>
+      </div>
+
+    </div>
+  </body>
+</html>
+"""
 
     # Create the email message object
     em = EmailMessage()
@@ -291,9 +348,9 @@ def send_email_with_image():
 # @app.route('/restart', methods=['POST'])
 def restart():
     # Send a "hi" message to the target application
-    target_url = 'http://localhost:5001/restart'  # Replace with your target URL
+    # target_url = 'http://localhost:5001/restart' 
+    target_url ='ec2-13-232-231-111.ap-south-1.compute.amazonaws.com/restart'
     data = {'message': 'hi'}
-    print("data is senddddddddddddddddddddddddddddd")
     response = requests.post(target_url, json=data)
 
     return 'Message sent!', 200
