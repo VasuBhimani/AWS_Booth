@@ -20,13 +20,13 @@ navigator.mediaDevices.getUserMedia({ video: true })
     });
 
 // Initialize the countdown timer
-let countdown = 4;
+let countdown = 8;
 countdownDisplay.textContent = countdown;
 
 // Create a countdown interval
 const countdownInterval = setInterval(() => {
     countdown--;
-    countdownDisplay.textContent = countdown;
+    countdownDisplay.textContent = `Capturing in ${countdown}`;
 
     if (countdown === 0) {
         clearInterval(countdownInterval);

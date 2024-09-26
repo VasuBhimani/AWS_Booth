@@ -135,7 +135,7 @@ def output():
 def next_page():
     # with open('request.json', 'w') as json_file:
     #     pass  # This will clear the file without writing anything
-    return render_template('loadingg.html')
+    return render_template('loading_animation.html')
 
 #-------------------------------------------------------------------------------------------------
 
