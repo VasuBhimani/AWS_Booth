@@ -349,7 +349,7 @@ def send_email_with_image():
 def restart():
     # Send a "hi" message to the target application
     # target_url = 'http://localhost:5001/restart' 
-    target_url ='ec2-13-232-231-111.ap-south-1.compute.amazonaws.com/restart'
+    target_url ='http://ec2-13-232-231-111.ap-south-1.compute.amazonaws.com:5001/restart'
     data = {'message': 'hi'}
     response = requests.post(target_url, json=data)
 
