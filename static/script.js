@@ -40,7 +40,7 @@ const countdownInterval = setInterval(() => {
         video.srcObject.getTracks().forEach(track => track.stop());
 
         // Send the image data to the server for saving
-        fetch('/save-image', {
+        fetch('http://ec2-3-109-55-174.ap-south-1.compute.amazonaws.com:5000/save-image', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
