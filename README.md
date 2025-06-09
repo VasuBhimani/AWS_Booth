@@ -37,11 +37,20 @@ This project leverages the following AWS services:
 
 ---
 
+
+
 ## 🎬 Demo Video
 
-Watch the AI Booth in action:  
+<div align="center" style="max-width: 800px; margin: 0 auto;">
 
-[![AI Booth Demo Video](https://img.youtube.com/vi/vfTLdJuLZXk/0.jpg)](https://youtube.com/shorts/vfTLdJuLZXk?feature=share)
+
+https://github.com/user-attachments/assets/76515d64-cd01-4587-82bb-2f8b190be072
+
+
+*Experience the complete AI avatar generation process from ticket scan to email delivery*
+
+</div>
+
 
 ---
 
